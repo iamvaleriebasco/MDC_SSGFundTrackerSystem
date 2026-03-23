@@ -16,13 +16,13 @@ class DashboardController extends Controller
         $totalExpense      = Transaction::where('type', 'expense')->where('status', 'approved')->sum('amount');
         $pendingCount      = Transaction::where('status', 'pending')->count();
         $recentTransactions = Transaction::with(['fund', 'member', 'recorder'])
-                                         ->latest()
-                                         ->take(10)
-                                         ->get();
+                                        ->latest()
+                                        ->take(10)
+                                        ->get();
 
         $activeFunds = Fund::where('status', 'active')
-                           ->withCount('transactions')
-                           ->get();
+                        ->withCount('transactions')
+                        ->get();
 
         return view('dashboard', compact(
             'totalFunds',

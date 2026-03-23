@@ -9,22 +9,31 @@ use App\Models\Fund;
 /**
  * TransactionObserver
  *
- * - Automatically updates fund balance on create, update, delete.
- * - Dispatches email receipt ONLY when a transaction is approved.
+ * - Income transactions are automatically approved on creation.
+ * - Expense transactions require Treasurer approval.
+ * - Fund balance is recalculated on every create, update, or delete.
+ * - Email receipt is dispatched when an expense is approved by the Treasurer.
  */
 class TransactionObserver
 {
     /**
-     * Recalculate fund balance after a transaction is created.
+     * Fires after a transaction is created.
+     * Income → auto-approve immediately.
+     * Expense → stays pending, waits for Treasurer.
      */
     public function created(Transaction $transaction): void
     {
+        if ($transaction->type === 'income') {
+            // updateQuietly skips firing the observer again (no infinite loop)
+            $transaction->updateQuietly(['status' => 'approved']);
+        }
+
         $this->recalculateFundBalance($transaction->fund_id);
     }
 
     /**
-     * Recalculate fund balance after a transaction is updated.
-     * Also sends email receipt if the transaction just became approved.
+     * Fires after a transaction is updated.
+     * Sends email receipt when an expense is approved by the Treasurer.
      */
     public function updated(Transaction $transaction): void
     {
@@ -35,10 +44,11 @@ class TransactionObserver
             $this->recalculateFundBalance($transaction->getOriginal('fund_id'));
         }
 
-        // Send email only when status just changed TO approved
+        // Send email only when an expense status just changed TO approved
         if (
             $transaction->wasChanged('status') &&
             $transaction->status === 'approved' &&
+            $transaction->type === 'expense' &&
             $transaction->member_id
         ) {
             SendTransactionReceiptJob::dispatch($transaction);
@@ -46,14 +56,14 @@ class TransactionObserver
     }
 
     /**
-     * Recalculate fund balance after a transaction is deleted.
+     * Fires after a transaction is deleted.
      */
     public function deleted(Transaction $transaction): void
     {
         $this->recalculateFundBalance($transaction->fund_id);
     }
 
-    //Private Helper
+    // Private Helper
 
     private function recalculateFundBalance(int $fundId): void
     {

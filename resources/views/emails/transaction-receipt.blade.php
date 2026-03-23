@@ -85,7 +85,7 @@
 <body>
     <div class="container">
         <div class="email-header">
-            <h1>&#127968; SSG Fund Tracker</h1>
+            <h1>SSG Fund Tracker</h1>
             <p>Supreme Student Government — Transaction Receipt</p>
         </div>
 

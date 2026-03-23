@@ -25,7 +25,6 @@
                         <th>Student ID</th>
                         <th>Name</th>
                         <th>Course</th>
-                        <th>Year / Section</th>
                         <th>Position</th>
                         <th>Transactions</th>
                         <th>Status</th>
@@ -45,7 +44,6 @@
                             <div class="text-muted" style="font-size:.75rem;">{{ $member->email }}</div>
                         </td>
                         <td style="font-size:.85rem;">{{ $member->course }}</td>
-                        <td style="font-size:.85rem;">{{ $member->year_level }} – Sec. {{ $member->section }}</td>
                         <td style="font-size:.83rem;">{{ $member->position ?? '—' }}</td>
                         <td>
                             <span class="badge bg-light text-dark border">

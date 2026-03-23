@@ -15,7 +15,7 @@
     </div>
 
     <div class="col-md-6">
-        <label class="form-label fw-500">Member (optional)</label>
+        <label class="form-label fw-500">Member</label>
         <select name="member_id" class="form-select @error('member_id') is-invalid @enderror">
             <option value="">-- No Member --</option>
             @foreach($members as $member)

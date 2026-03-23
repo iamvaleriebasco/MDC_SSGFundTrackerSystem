@@ -52,20 +52,11 @@
     </div>
 
     <div class="col-md-4">
-        <label class="form-label fw-500">Section <span class="text-danger">*</span></label>
-        <input type="text" name="section"
-               class="form-control @error('section') is-invalid @enderror"
-               value="{{ old('section', $member->section ?? '') }}"
-               placeholder="A">
-        @error('section')<div class="invalid-feedback">{{ $message }}</div>@enderror
-    </div>
-
-    <div class="col-md-4">
         <label class="form-label fw-500">Position</label>
         <input type="text" name="position"
                class="form-control @error('position') is-invalid @enderror"
                value="{{ old('position', $member->position ?? '') }}"
-               placeholder="SSG President (optional)">
+               placeholder="SSG Position">
         @error('position')<div class="invalid-feedback">{{ $message }}</div>@enderror
     </div>
 

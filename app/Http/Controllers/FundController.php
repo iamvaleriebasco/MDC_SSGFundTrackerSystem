@@ -35,15 +35,15 @@ class FundController extends Controller
         Fund::create($validated);
 
         return redirect()->route('funds.index')
-                         ->with('success', 'Fund created successfully.');
+                        ->with('success', 'Fund created successfully.');
     }
 
     public function show(Fund $fund)
     {
         $transactions = $fund->transactions()
-                             ->with(['member', 'recorder'])
-                             ->latest()
-                             ->paginate(15);
+                            ->with(['member', 'recorder'])
+                            ->latest()
+                            ->paginate(15);
 
         return view('funds.show', compact('fund', 'transactions'));
     }
@@ -67,7 +67,7 @@ class FundController extends Controller
         $fund->update($validated);
 
         return redirect()->route('funds.index')
-                         ->with('success', 'Fund updated successfully.');
+                        ->with('success', 'Fund updated successfully.');
     }
 
     public function destroy(Fund $fund)
@@ -75,6 +75,6 @@ class FundController extends Controller
         $fund->delete();
 
         return redirect()->route('funds.index')
-                         ->with('success', 'Fund deleted successfully.');
+                        ->with('success', 'Fund deleted successfully.');
     }
 }

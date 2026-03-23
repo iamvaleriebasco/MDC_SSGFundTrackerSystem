@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Jobs\SendTransactionReceiptJob;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
@@ -28,7 +29,14 @@ class Transaction extends Model
         'transaction_date' => 'date',
     ];
 
-    // Relationships
+    protected static function booted(): void
+    {
+        static::created(function (Transaction $transaction) {
+            if ($transaction->type === 'income') {
+                SendTransactionReceiptJob::dispatch($transaction);
+            }
+        });
+    }
 
     public function fund()
     {
